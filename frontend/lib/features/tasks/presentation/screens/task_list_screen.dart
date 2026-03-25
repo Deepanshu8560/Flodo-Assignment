@@ -4,6 +4,7 @@ import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../providers/task_providers.dart';
 import '../widgets/task_card.dart';
+import '../widgets/task_search_bar.dart';
 
 /// Main task list screen with search bar and status filter.
 class TaskListScreen extends ConsumerWidget {
@@ -77,6 +78,9 @@ class TaskListScreen extends ConsumerWidget {
       ),
       body: Column(
         children: [
+          // Search bar
+          const TaskSearchBar(),
+          
           // Active filter chip
           if (taskState.statusFilter != null)
             Padding(
@@ -141,6 +145,7 @@ class TaskListScreen extends ConsumerWidget {
           final task = taskState.tasks[index];
           return TaskCard(
             task: task,
+            searchQuery: taskState.searchQuery,
             isDeleting: taskState.deletingTaskId == task.id,
             onTap: () {
               Navigator.of(context).pushNamed('/edit', arguments: task);

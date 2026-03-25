@@ -9,6 +9,7 @@ class TaskCard extends StatelessWidget {
   final VoidCallback onTap;
   final VoidCallback onDelete;
   final bool isDeleting;
+  final String searchQuery;
 
   const TaskCard({
     super.key,
@@ -16,6 +17,7 @@ class TaskCard extends StatelessWidget {
     required this.onTap,
     required this.onDelete,
     this.isDeleting = false,
+    this.searchQuery = '',
   });
 
   Color _statusColor() {
@@ -42,6 +44,55 @@ class TaskCard extends StatelessWidget {
       default:
         return Icons.radio_button_unchecked;
     }
+  }
+
+  Widget _buildHighlightedText(
+    String text,
+    TextStyle style, {
+    int? maxLines,
+    TextOverflow? overflow,
+  }) {
+    if (searchQuery.isEmpty || !text.toLowerCase().contains(searchQuery.toLowerCase())) {
+      return Text(
+        text,
+        style: style,
+        maxLines: maxLines,
+        overflow: overflow,
+      );
+    }
+
+    final lowerText = text.toLowerCase();
+    final lowerQuery = searchQuery.toLowerCase();
+    
+    final List<TextSpan> spans = [];
+    int start = 0;
+    int indexOfMatch;
+
+    while ((indexOfMatch = lowerText.indexOf(lowerQuery, start)) != -1) {
+      if (indexOfMatch > start) {
+        spans.add(TextSpan(text: text.substring(start, indexOfMatch)));
+      }
+      
+      spans.add(TextSpan(
+        text: text.substring(indexOfMatch, indexOfMatch + searchQuery.length),
+        style: style.copyWith(
+          backgroundColor: AppTheme.primaryColor.withValues(alpha: 0.3),
+          color: Colors.white,
+        ),
+      ));
+      
+      start = indexOfMatch + searchQuery.length;
+    }
+
+    if (start < text.length) {
+      spans.add(TextSpan(text: text.substring(start)));
+    }
+
+    return RichText(
+      maxLines: maxLines,
+      overflow: overflow ?? TextOverflow.clip,
+      text: TextSpan(style: style, children: spans),
+    );
   }
 
   @override
@@ -130,9 +181,9 @@ class TaskCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
                 // Title
-                Text(
+                _buildHighlightedText(
                   task.title,
-                  style: TextStyle(
+                  TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
                     color: isBlocked ? Colors.white54 : Colors.white,
@@ -145,9 +196,9 @@ class TaskCard extends StatelessWidget {
                 ),
                 if (task.description.isNotEmpty) ...[
                   const SizedBox(height: 6),
-                  Text(
+                  _buildHighlightedText(
                     task.description,
-                    style: TextStyle(
+                    TextStyle(
                       fontSize: 13,
                       color: isBlocked ? Colors.white30 : Colors.white60,
                     ),
