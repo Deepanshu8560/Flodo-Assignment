@@ -141,6 +141,7 @@ class TaskListScreen extends ConsumerWidget {
           final task = taskState.tasks[index];
           return TaskCard(
             task: task,
+            isDeleting: taskState.deletingTaskId == task.id,
             onTap: () {
               Navigator.of(context).pushNamed('/edit', arguments: task);
             },

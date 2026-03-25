@@ -37,6 +37,7 @@ class TaskListState {
   final String? error;
   final String searchQuery;
   final String? statusFilter;
+  final String? deletingTaskId;
 
   const TaskListState({
     this.tasks = const [],
@@ -44,6 +45,7 @@ class TaskListState {
     this.error,
     this.searchQuery = '',
     this.statusFilter,
+    this.deletingTaskId,
   });
 
   TaskListState copyWith({
@@ -54,6 +56,7 @@ class TaskListState {
     String? statusFilter,
     bool clearError = false,
     bool clearStatusFilter = false,
+    bool clearDeletingTaskId = false,
   }) {
     return TaskListState(
       tasks: tasks ?? this.tasks,
@@ -61,6 +64,7 @@ class TaskListState {
       error: clearError ? null : (error ?? this.error),
       searchQuery: searchQuery ?? this.searchQuery,
       statusFilter: clearStatusFilter ? null : (statusFilter ?? this.statusFilter),
+      deletingTaskId: clearDeletingTaskId ? null : (deletingTaskId ?? this.deletingTaskId),
     );
   }
 }
@@ -97,11 +101,12 @@ class TaskListNotifier extends StateNotifier<TaskListState> {
   }
 
   Future<void> deleteTask(String id) async {
+    state = state.copyWith(deletingTaskId: id, clearError: true);
     try {
       await _repository.deleteTask(id);
       await loadTasks();
     } catch (e) {
-      state = state.copyWith(error: e.toString());
+      state = state.copyWith(error: e.toString(), clearDeletingTaskId: true);
     }
   }
 }

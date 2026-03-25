@@ -8,12 +8,14 @@ class TaskCard extends StatelessWidget {
   final Task task;
   final VoidCallback onTap;
   final VoidCallback onDelete;
+  final bool isDeleting;
 
   const TaskCard({
     super.key,
     required this.task,
     required this.onTap,
     required this.onDelete,
+    this.isDeleting = false,
   });
 
   Color _statusColor() {
@@ -106,12 +108,24 @@ class TaskCard extends StatelessWidget {
                         color: AppTheme.blockedColor,
                         size: 18,
                       ),
-                    IconButton(
-                      icon: const Icon(Icons.delete_outline_rounded, size: 20),
-                      color: Colors.white38,
-                      onPressed: () => _showDeleteConfirmation(context),
-                      visualDensity: VisualDensity.compact,
-                    ),
+                    isDeleting
+                        ? const Padding(
+                            padding: EdgeInsets.all(12.0),
+                            child: SizedBox(
+                              width: 16,
+                              height: 16,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: AppTheme.primaryColor,
+                              ),
+                            ),
+                          )
+                        : IconButton(
+                            icon: const Icon(Icons.delete_outline_rounded, size: 20),
+                            color: Colors.white38,
+                            onPressed: () => _showDeleteConfirmation(context),
+                            visualDensity: VisualDensity.compact,
+                          ),
                   ],
                 ),
                 const SizedBox(height: 10),
