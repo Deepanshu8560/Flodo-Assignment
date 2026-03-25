@@ -25,9 +25,22 @@ class TaskRepository:
         await self.db.refresh(task)
         return task
 
-    async def get_all(self) -> list[Task]:
-        """Get all tasks."""
-        result = await self.db.execute(select(Task).order_by(Task.created_at.desc()))
+    async def get_all(
+        self,
+        search: str | None = None,
+        status: str | None = None,
+    ) -> list[Task]:
+        """Get all tasks with optional search and filter."""
+        query = select(Task)
+
+        if search:
+            query = query.where(Task.title.ilike(f"%{search}%"))
+
+        if status:
+            query = query.where(Task.status == status)
+
+        query = query.order_by(Task.created_at.desc())
+        result = await self.db.execute(query)
         return list(result.scalars().all())
 
     async def get_by_id(self, task_id: str) -> Optional[Task]:

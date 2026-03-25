@@ -50,9 +50,13 @@ class TaskService:
         created_task = await self.repository.create(task)
         return await self._to_response(created_task)
 
-    async def get_all_tasks(self) -> list[TaskResponse]:
-        """Get all tasks."""
-        tasks = await self.repository.get_all()
+    async def get_all_tasks(
+        self,
+        search: str | None = None,
+        status: str | None = None,
+    ) -> list[TaskResponse]:
+        """Get all tasks with optional search and filter."""
+        tasks = await self.repository.get_all(search=search, status=status)
         return [await self._to_response(task) for task in tasks]
 
     async def get_task(self, task_id: str) -> TaskResponse:

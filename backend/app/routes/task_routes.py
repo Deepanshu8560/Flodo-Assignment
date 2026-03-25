@@ -4,7 +4,9 @@ Task Management API - Task Routes
 REST API endpoints for task CRUD operations.
 """
 
-from fastapi import APIRouter, Depends
+from typing import Optional
+
+from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
@@ -32,10 +34,12 @@ async def create_task(
 
 @router.get("/", response_model=list[TaskResponse])
 async def get_tasks(
+    search: Optional[str] = Query(default=None, description="Search tasks by title"),
+    status: Optional[str] = Query(default=None, description="Filter by status"),
     service: TaskService = Depends(get_task_service),
 ):
-    """Get all tasks."""
-    return await service.get_all_tasks()
+    """Get all tasks with optional search and filter."""
+    return await service.get_all_tasks(search=search, status=status)
 
 
 @router.get("/{task_id}", response_model=TaskResponse)
