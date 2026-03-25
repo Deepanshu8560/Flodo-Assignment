@@ -24,21 +24,49 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
   late String _status;
   String? _blockedBy;
   bool _isSubmitting = false;
+  late String _draftId;
 
   bool get _isEditing => widget.task != null;
 
   @override
   void initState() {
     super.initState();
-    _titleController = TextEditingController(text: widget.task?.title ?? '');
-    _descriptionController = TextEditingController(text: widget.task?.description ?? '');
-    _dueDate = widget.task?.dueDate;
-    _status = widget.task?.status ?? TaskStatusConstants.toDo;
-    _blockedBy = widget.task?.blockedBy;
+    _draftId = widget.task?.id ?? 'new';
+
+    final draftService = ref.read(draftServiceProvider);
+    final draft = draftService.loadDraft(_draftId);
+
+    _titleController = TextEditingController(text: draft?['title'] ?? widget.task?.title ?? '');
+    _descriptionController = TextEditingController(text: draft?['description'] ?? widget.task?.description ?? '');
+
+    if (draft != null && draft['due_date'] != null) {
+      _dueDate = DateTime.parse(draft['due_date']);
+    } else {
+      _dueDate = widget.task?.dueDate;
+    }
+
+    _status = draft?['status'] ?? widget.task?.status ?? TaskStatusConstants.toDo;
+    _blockedBy = draft?['blocked_by'] ?? widget.task?.blockedBy;
+
+    _titleController.addListener(_saveDraft);
+    _descriptionController.addListener(_saveDraft);
+  }
+
+  void _saveDraft() {
+    final draftService = ref.read(draftServiceProvider);
+    draftService.saveDraft(_draftId, {
+      'title': _titleController.text,
+      'description': _descriptionController.text,
+      if (_dueDate != null) 'due_date': _dueDate!.toIso8601String(),
+      'status': _status,
+      if (_blockedBy != null) 'blocked_by': _blockedBy,
+    });
   }
 
   @override
   void dispose() {
+    _titleController.removeListener(_saveDraft);
+    _descriptionController.removeListener(_saveDraft);
     _titleController.dispose();
     _descriptionController.dispose();
     super.dispose();
@@ -64,6 +92,7 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
     );
     if (picked != null) {
       setState(() => _dueDate = picked);
+      _saveDraft();
     }
   }
 
@@ -93,6 +122,9 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
           blockedBy: _blockedBy,
         );
       }
+
+      // Clear draft on success
+      await ref.read(draftServiceProvider).clearDraft(_draftId);
 
       // Refresh task list
       ref.read(taskListProvider.notifier).loadTasks();
@@ -259,7 +291,10 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
                     );
                   }).toList(),
                   onChanged: (value) {
-                    if (value != null) setState(() => _status = value);
+                    if (value != null) {
+                      setState(() => _status = value);
+                      _saveDraft();
+                    }
                   },
                 ),
               ),
@@ -299,6 +334,7 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
                   ],
                   onChanged: (value) {
                     setState(() => _blockedBy = value);
+                    _saveDraft();
                   },
                 ),
               ),

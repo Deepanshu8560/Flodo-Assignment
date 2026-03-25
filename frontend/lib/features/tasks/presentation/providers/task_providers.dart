@@ -1,9 +1,21 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../core/network/draft_service.dart';
 import '../../data/datasources/task_remote_datasource.dart';
 import '../../data/repositories/task_repository_impl.dart';
 import '../../domain/entities/task.dart';
 import '../../domain/repositories/task_repository.dart';
+
+// SharedPreferences provider (must be overridden in main.dart)
+final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
+  throw UnimplementedError('sharedPreferencesProvider must be overridden');
+});
+
+// DraftService provider
+final draftServiceProvider = Provider<DraftService>((ref) {
+  return DraftService(ref.watch(sharedPreferencesProvider));
+});
 
 // HTTP client provider
 final httpClientProvider = Provider<http.Client>((ref) => http.Client());
