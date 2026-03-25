@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/theme/app_theme.dart';
 import 'features/tasks/domain/entities/task.dart';
 import 'features/tasks/presentation/screens/task_list_screen.dart';
+import 'features/tasks/presentation/screens/task_form_screen.dart';
 
 void main() {
   runApp(const ProviderScope(child: TaskManagerApp()));
@@ -26,16 +27,12 @@ class TaskManagerApp extends StatelessWidget {
             );
           case '/create':
             return MaterialPageRoute(
-              builder: (_) => const Scaffold(
-                body: Center(child: Text('Create Task - Coming Soon')),
-              ),
+              builder: (_) => const TaskFormScreen(),
             );
           case '/edit':
             final task = settings.arguments as Task?;
             return MaterialPageRoute(
-              builder: (_) => Scaffold(
-                body: Center(child: Text('Edit Task: ${task?.title ?? "Unknown"}')),
-              ),
+              builder: (_) => TaskFormScreen(task: task),
             );
           default:
             return MaterialPageRoute(
