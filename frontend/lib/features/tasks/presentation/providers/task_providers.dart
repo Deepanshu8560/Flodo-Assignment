@@ -98,3 +98,6 @@ class TaskListNotifier extends StateNotifier<TaskListState> {
 final taskListProvider = StateNotifierProvider<TaskListNotifier, TaskListState>((ref) {
   return TaskListNotifier(ref.watch(taskRepositoryProvider));
 });
+
+// Re-export form provider
+export 'task_form_provider.dart';
