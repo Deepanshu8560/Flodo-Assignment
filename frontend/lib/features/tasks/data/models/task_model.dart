@@ -1,4 +1,3 @@
-import 'dart:convert';
 import '../../domain/entities/task.dart';
 
 /// Task model - Data layer representation with JSON serialization.
@@ -20,7 +19,9 @@ class TaskModel extends Task {
       id: json['id'] as String,
       title: json['title'] as String,
       description: (json['description'] as String?) ?? '',
-      dueDate: json['due_date'] != null ? DateTime.parse(json['due_date'] as String) : null,
+      dueDate: json['due_date'] != null
+          ? DateTime.parse(json['due_date'] as String)
+          : null,
       status: json['status'] as String,
       blockedBy: json['blocked_by'] as String?,
       blockedByTitle: json['blocked_by_title'] as String?,

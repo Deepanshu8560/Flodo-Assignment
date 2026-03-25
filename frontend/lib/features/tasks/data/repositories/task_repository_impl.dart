@@ -1,7 +1,6 @@
 import '../../domain/entities/task.dart';
 import '../../domain/repositories/task_repository.dart';
 import '../datasources/task_remote_datasource.dart';
-import '../models/task_model.dart';
 
 /// Implementation of TaskRepository using remote data source.
 class TaskRepositoryImpl implements TaskRepository {
@@ -54,9 +53,13 @@ class TaskRepositoryImpl implements TaskRepository {
     final data = <String, dynamic>{};
     if (title != null) data['title'] = title;
     if (description != null) data['description'] = description;
-    if (dueDate != null) data['due_date'] = dueDate.toIso8601String().split('T').first;
+    if (dueDate != null) {
+      data['due_date'] = dueDate.toIso8601String().split('T').first;
+    }
     if (status != null) data['status'] = status;
-    if (blockedBy != null) data['blocked_by'] = blockedBy.isEmpty ? null : blockedBy;
+    if (blockedBy != null) {
+      data['blocked_by'] = blockedBy.isEmpty ? null : blockedBy;
+    }
     return await remoteDataSource.updateTask(id, data);
   }
 

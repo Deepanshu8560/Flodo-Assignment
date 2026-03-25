@@ -51,5 +51,15 @@ class Task extends Equatable {
   }
 
   @override
-  List<Object?> get props => [id, title, description, dueDate, status, blockedBy, blockedByTitle, createdAt, updatedAt];
+  List<Object?> get props => [
+    id,
+    title,
+    description,
+    dueDate,
+    status,
+    blockedBy,
+    blockedByTitle,
+    createdAt,
+    updatedAt,
+  ];
 }

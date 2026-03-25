@@ -13,15 +13,15 @@ void main() {
         'is_blocked': true,
         'blocked_by_title': 'Other Task',
       };
-      
+
       final task = Task.fromJson(json);
-      
+
       expect(task.id, '123');
       expect(task.title, 'Test title');
       expect(task.blockedBy, '456');
       expect(task.isBlocked, true);
       expect(task.blockedByTitle, 'Other Task');
-      
+
       final outputJson = task.toJson();
       expect(outputJson['title'], 'Test title');
       expect(outputJson['blocked_by'], '456');
@@ -34,9 +34,9 @@ void main() {
         'description': '',
         'status': 'To-Do',
       };
-      
+
       final task = Task.fromJson(json);
-      
+
       expect(task.blockedBy, null);
       expect(task.isBlocked, false);
       expect(task.blockedByTitle, null);

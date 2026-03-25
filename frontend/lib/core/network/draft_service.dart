@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class DraftService {
   static const String _draftKeyPrefix = 'task_draft_';
   // Use a special id 'new' for creation drafts, otherwise use the task id for edit drafts
-  
+
   final SharedPreferences _prefs;
 
   DraftService(this._prefs);

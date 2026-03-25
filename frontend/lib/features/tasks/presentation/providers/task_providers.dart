@@ -64,7 +64,7 @@ class TaskListState {
       error: clearError ? null : (error ?? this.error),
       searchQuery: searchQuery ?? this.searchQuery,
       statusFilter: clearStatusFilter ? null : (statusFilter ?? this.statusFilter),
-      deletingTaskId: clearDeletingTaskId ? null : (deletingTaskId ?? this.deletingTaskId),
+      deletingTaskId: clearDeletingTaskId ? null : (deletingTaskId ?? deletingTaskId),
     );
   }
 }

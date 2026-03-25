@@ -1,5 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../domain/entities/task.dart';
 import '../../domain/repositories/task_repository.dart';
 
 /// State for task form operations (create/update).
@@ -43,7 +42,11 @@ class TaskFormNotifier extends StateNotifier<TaskFormState> {
   }) async {
     if (state.isSubmitting) return false; // Prevent duplicate
 
-    state = state.copyWith(isSubmitting: true, clearError: true, isSuccess: false);
+    state = state.copyWith(
+      isSubmitting: true,
+      clearError: true,
+      isSuccess: false,
+    );
     try {
       await _repository.createTask(
         title: title,
@@ -70,7 +73,11 @@ class TaskFormNotifier extends StateNotifier<TaskFormState> {
   }) async {
     if (state.isSubmitting) return false; // Prevent duplicate
 
-    state = state.copyWith(isSubmitting: true, clearError: true, isSuccess: false);
+    state = state.copyWith(
+      isSubmitting: true,
+      clearError: true,
+      isSuccess: false,
+    );
     try {
       await _repository.updateTask(
         id: id,

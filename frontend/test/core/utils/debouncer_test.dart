@@ -12,9 +12,9 @@ void main() {
       });
 
       expect(didExecute, isFalse);
-      
+
       await Future.delayed(const Duration(milliseconds: 150));
-      
+
       expect(didExecute, isTrue);
     });
 
@@ -25,14 +25,14 @@ void main() {
       debouncer.run(() {
         executionCount++;
       });
-      
+
       // Call again immediately
       debouncer.run(() {
         executionCount++;
       });
 
       await Future.delayed(const Duration(milliseconds: 150));
-      
+
       // Should have only executed once
       expect(executionCount, equals(1));
     });

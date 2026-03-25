@@ -52,18 +52,14 @@ class TaskCard extends StatelessWidget {
     int? maxLines,
     TextOverflow? overflow,
   }) {
-    if (searchQuery.isEmpty || !text.toLowerCase().contains(searchQuery.toLowerCase())) {
-      return Text(
-        text,
-        style: style,
-        maxLines: maxLines,
-        overflow: overflow,
-      );
+    if (searchQuery.isEmpty ||
+        !text.toLowerCase().contains(searchQuery.toLowerCase())) {
+      return Text(text, style: style, maxLines: maxLines, overflow: overflow);
     }
 
     final lowerText = text.toLowerCase();
     final lowerQuery = searchQuery.toLowerCase();
-    
+
     final List<TextSpan> spans = [];
     int start = 0;
     int indexOfMatch;
@@ -72,15 +68,17 @@ class TaskCard extends StatelessWidget {
       if (indexOfMatch > start) {
         spans.add(TextSpan(text: text.substring(start, indexOfMatch)));
       }
-      
-      spans.add(TextSpan(
-        text: text.substring(indexOfMatch, indexOfMatch + searchQuery.length),
-        style: style.copyWith(
-          backgroundColor: AppTheme.primaryColor.withValues(alpha: 0.3),
-          color: Colors.white,
+
+      spans.add(
+        TextSpan(
+          text: text.substring(indexOfMatch, indexOfMatch + searchQuery.length),
+          style: style.copyWith(
+            backgroundColor: AppTheme.primaryColor.withValues(alpha: 0.3),
+            color: Colors.white,
+          ),
         ),
-      ));
-      
+      );
+
       start = indexOfMatch + searchQuery.length;
     }
 
@@ -130,23 +128,31 @@ class TaskCard extends StatelessWidget {
                       width: 8,
                       height: 8,
                       decoration: BoxDecoration(
-                        color: isBlocked ? AppTheme.blockedColor : _statusColor(),
+                        color: isBlocked
+                            ? AppTheme.blockedColor
+                            : _statusColor(),
                         shape: BoxShape.circle,
                       ),
                     ),
                     const SizedBox(width: 8),
                     // Status badge
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 3,
+                      ),
                       decoration: BoxDecoration(
-                        color: (isBlocked ? AppTheme.blockedColor : _statusColor())
-                            .withValues(alpha: 0.15),
+                        color:
+                            (isBlocked ? AppTheme.blockedColor : _statusColor())
+                                .withValues(alpha: 0.15),
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: Text(
                         isBlocked ? 'Blocked' : task.status,
                         style: TextStyle(
-                          color: isBlocked ? AppTheme.blockedColor : _statusColor(),
+                          color: isBlocked
+                              ? AppTheme.blockedColor
+                              : _statusColor(),
                           fontSize: 11,
                           fontWeight: FontWeight.w600,
                         ),
@@ -172,7 +178,10 @@ class TaskCard extends StatelessWidget {
                             ),
                           )
                         : IconButton(
-                            icon: const Icon(Icons.delete_outline_rounded, size: 20),
+                            icon: const Icon(
+                              Icons.delete_outline_rounded,
+                              size: 20,
+                            ),
                             color: Colors.white38,
                             onPressed: () => _showDeleteConfirmation(context),
                             visualDensity: VisualDensity.compact,

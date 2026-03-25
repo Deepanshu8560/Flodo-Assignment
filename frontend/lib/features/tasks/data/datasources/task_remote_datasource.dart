@@ -15,11 +15,14 @@ class TaskRemoteDataSource {
     if (search != null && search.isNotEmpty) queryParams['search'] = search;
     if (status != null && status.isNotEmpty) queryParams['status'] = status;
 
-    final uri = Uri.parse('${ApiConstants.baseUrl}${ApiConstants.tasksEndpoint}/')
-        .replace(queryParameters: queryParams.isNotEmpty ? queryParams : null);
+    final uri = Uri.parse(
+      '${ApiConstants.baseUrl}${ApiConstants.tasksEndpoint}/',
+    ).replace(queryParameters: queryParams.isNotEmpty ? queryParams : null);
 
     try {
-      final response = await client.get(uri).timeout(ApiConstants.timeoutDuration);
+      final response = await client
+          .get(uri)
+          .timeout(ApiConstants.timeoutDuration);
       if (response.statusCode == 200) {
         final List<dynamic> jsonList = json.decode(response.body);
         return jsonList.map((json) => TaskModel.fromJson(json)).toList();
@@ -36,10 +39,16 @@ class TaskRemoteDataSource {
   }
 
   Future<TaskModel> createTask(Map<String, dynamic> taskData) async {
-    final uri = Uri.parse('${ApiConstants.baseUrl}${ApiConstants.tasksEndpoint}/');
+    final uri = Uri.parse(
+      '${ApiConstants.baseUrl}${ApiConstants.tasksEndpoint}/',
+    );
     try {
       final response = await client
-          .post(uri, headers: {'Content-Type': 'application/json'}, body: json.encode(taskData))
+          .post(
+            uri,
+            headers: {'Content-Type': 'application/json'},
+            body: json.encode(taskData),
+          )
           .timeout(ApiConstants.timeoutDuration);
       if (response.statusCode == 201) {
         return TaskModel.fromJson(json.decode(response.body));
@@ -57,10 +66,16 @@ class TaskRemoteDataSource {
   }
 
   Future<TaskModel> updateTask(String id, Map<String, dynamic> taskData) async {
-    final uri = Uri.parse('${ApiConstants.baseUrl}${ApiConstants.tasksEndpoint}/$id');
+    final uri = Uri.parse(
+      '${ApiConstants.baseUrl}${ApiConstants.tasksEndpoint}/$id',
+    );
     try {
       final response = await client
-          .put(uri, headers: {'Content-Type': 'application/json'}, body: json.encode(taskData))
+          .put(
+            uri,
+            headers: {'Content-Type': 'application/json'},
+            body: json.encode(taskData),
+          )
           .timeout(ApiConstants.timeoutDuration);
       if (response.statusCode == 200) {
         return TaskModel.fromJson(json.decode(response.body));
@@ -78,9 +93,13 @@ class TaskRemoteDataSource {
   }
 
   Future<void> deleteTask(String id) async {
-    final uri = Uri.parse('${ApiConstants.baseUrl}${ApiConstants.tasksEndpoint}/$id');
+    final uri = Uri.parse(
+      '${ApiConstants.baseUrl}${ApiConstants.tasksEndpoint}/$id',
+    );
     try {
-      final response = await client.delete(uri).timeout(ApiConstants.timeoutDuration);
+      final response = await client
+          .delete(uri)
+          .timeout(ApiConstants.timeoutDuration);
       if (response.statusCode != 200) {
         throw ServerException(
           message: 'Failed to delete task',

@@ -10,7 +10,7 @@ import 'features/tasks/presentation/screens/task_form_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final sharedPreferences = await SharedPreferences.getInstance();
-  
+
   runApp(
     ProviderScope(
       overrides: [
@@ -34,22 +34,16 @@ class TaskManagerApp extends StatelessWidget {
       onGenerateRoute: (settings) {
         switch (settings.name) {
           case '/':
-            return MaterialPageRoute(
-              builder: (_) => const TaskListScreen(),
-            );
+            return MaterialPageRoute(builder: (_) => const TaskListScreen());
           case '/create':
-            return MaterialPageRoute(
-              builder: (_) => const TaskFormScreen(),
-            );
+            return MaterialPageRoute(builder: (_) => const TaskFormScreen());
           case '/edit':
             final task = settings.arguments as Task?;
             return MaterialPageRoute(
               builder: (_) => TaskFormScreen(task: task),
             );
           default:
-            return MaterialPageRoute(
-              builder: (_) => const TaskListScreen(),
-            );
+            return MaterialPageRoute(builder: (_) => const TaskListScreen());
         }
       },
     );

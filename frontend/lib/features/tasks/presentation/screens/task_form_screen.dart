@@ -36,8 +36,12 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
     final draftService = ref.read(draftServiceProvider);
     final draft = draftService.loadDraft(_draftId);
 
-    _titleController = TextEditingController(text: draft?['title'] ?? widget.task?.title ?? '');
-    _descriptionController = TextEditingController(text: draft?['description'] ?? widget.task?.description ?? '');
+    _titleController = TextEditingController(
+      text: draft?['title'] ?? widget.task?.title ?? '',
+    );
+    _descriptionController = TextEditingController(
+      text: draft?['description'] ?? widget.task?.description ?? '',
+    );
 
     if (draft != null && draft['due_date'] != null) {
       _dueDate = DateTime.parse(draft['due_date']);
@@ -45,7 +49,8 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
       _dueDate = widget.task?.dueDate;
     }
 
-    _status = draft?['status'] ?? widget.task?.status ?? TaskStatusConstants.toDo;
+    _status =
+        draft?['status'] ?? widget.task?.status ?? TaskStatusConstants.toDo;
     _blockedBy = draft?['blocked_by'] ?? widget.task?.blockedBy;
 
     _titleController.addListener(_saveDraft);
@@ -133,7 +138,11 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
         Navigator.of(context).pop();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(_isEditing ? 'Task updated successfully!' : 'Task created successfully!'),
+            content: Text(
+              _isEditing
+                  ? 'Task updated successfully!'
+                  : 'Task created successfully!',
+            ),
             backgroundColor: AppTheme.accentColor,
           ),
         );
@@ -223,7 +232,10 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
               GestureDetector(
                 onTap: _selectDate,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 14,
+                  ),
                   decoration: BoxDecoration(
                     color: AppTheme.darkCard,
                     borderRadius: BorderRadius.circular(12),
@@ -232,7 +244,9 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
                     children: [
                       Icon(
                         Icons.calendar_today_rounded,
-                        color: _dueDate != null ? AppTheme.primaryColor : Colors.white38,
+                        color: _dueDate != null
+                            ? AppTheme.primaryColor
+                            : Colors.white38,
                         size: 20,
                       ),
                       const SizedBox(width: 12),
@@ -241,7 +255,9 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
                             ? DateFormat('MMM dd, yyyy').format(_dueDate!)
                             : 'Select due date',
                         style: TextStyle(
-                          color: _dueDate != null ? Colors.white : Colors.white38,
+                          color: _dueDate != null
+                              ? Colors.white
+                              : Colors.white38,
                           fontSize: 15,
                         ),
                       ),
@@ -249,7 +265,11 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
                       if (_dueDate != null)
                         GestureDetector(
                           onTap: () => setState(() => _dueDate = null),
-                          child: const Icon(Icons.close, color: Colors.white38, size: 18),
+                          child: const Icon(
+                            Icons.close,
+                            color: Colors.white38,
+                            size: 18,
+                          ),
                         ),
                     ],
                   ),
@@ -268,7 +288,7 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: DropdownButtonFormField<String>(
-                  value: _status,
+                  initialValue: _status,
                   dropdownColor: AppTheme.darkCard,
                   decoration: const InputDecoration(border: InputBorder.none),
                   items: TaskStatusConstants.all.map((status) {
@@ -285,7 +305,10 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
                             ),
                           ),
                           const SizedBox(width: 10),
-                          Text(status, style: const TextStyle(color: Colors.white)),
+                          Text(
+                            status,
+                            style: const TextStyle(color: Colors.white),
+                          ),
                         ],
                       ),
                     );
@@ -311,15 +334,23 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: DropdownButtonFormField<String?>(
-                  value: availableTasks.any((t) => t.id == _blockedBy) ? _blockedBy : null,
+                  initialValue: availableTasks.any((t) => t.id == _blockedBy)
+                      ? _blockedBy
+                      : null,
                   dropdownColor: AppTheme.darkCard,
                   decoration: const InputDecoration(border: InputBorder.none),
-                  hint: const Text('None (not blocked)', style: TextStyle(color: Colors.white38)),
+                  hint: const Text(
+                    'None (not blocked)',
+                    style: TextStyle(color: Colors.white38),
+                  ),
                   isExpanded: true,
                   items: [
                     const DropdownMenuItem<String?>(
                       value: null,
-                      child: Text('None', style: TextStyle(color: Colors.white70)),
+                      child: Text(
+                        'None',
+                        style: TextStyle(color: Colors.white70),
+                      ),
                     ),
                     ...availableTasks.map(
                       (task) => DropdownMenuItem<String?>(
@@ -348,7 +379,9 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
                   onPressed: _isSubmitting ? null : _submitForm,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppTheme.primaryColor,
-                    disabledBackgroundColor: AppTheme.primaryColor.withValues(alpha: 0.5),
+                    disabledBackgroundColor: AppTheme.primaryColor.withValues(
+                      alpha: 0.5,
+                    ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14),
                     ),

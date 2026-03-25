@@ -20,10 +20,7 @@ class TaskListScreen extends ConsumerWidget {
         backgroundColor: AppTheme.darkBg,
         title: const Text(
           'Task Manager',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 24,
-          ),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
         ),
         actions: [
           // Status filter dropdown
@@ -80,7 +77,7 @@ class TaskListScreen extends ConsumerWidget {
         children: [
           // Search bar
           const TaskSearchBar(),
-          
+
           // Active filter chip
           if (taskState.statusFilter != null)
             Padding(
@@ -96,16 +93,16 @@ class TaskListScreen extends ConsumerWidget {
                     onDeleted: () {
                       ref.read(taskListProvider.notifier).filterByStatus(null);
                     },
-                    backgroundColor: AppTheme.primaryColor.withValues(alpha: 0.2),
+                    backgroundColor: AppTheme.primaryColor.withValues(
+                      alpha: 0.2,
+                    ),
                     side: BorderSide.none,
                   ),
                 ],
               ),
             ),
           // Task list
-          Expanded(
-            child: _buildBody(context, ref, taskState),
-          ),
+          Expanded(child: _buildBody(context, ref, taskState)),
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
@@ -225,7 +222,8 @@ class TaskListScreen extends ConsumerWidget {
   }
 
   Widget _buildEmptyState(TaskListState taskState) {
-    final hasFilter = taskState.searchQuery.isNotEmpty || taskState.statusFilter != null;
+    final hasFilter =
+        taskState.searchQuery.isNotEmpty || taskState.statusFilter != null;
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
